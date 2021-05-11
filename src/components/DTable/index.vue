@@ -2,7 +2,7 @@
   <div>
     <el-table
       :data="tableData"
-      v-bind="{...attrs}"
+      v-bind="$attrs"
       @current-change="handleCurrentChange"
       @selection-change="handleSelectionChange"
     >
@@ -77,17 +77,11 @@ export default {
   setup(props, context) {
     const { handleCurrentChange } = useHandleCurrentChangeEffect(context)
     const { handleSelectionChange } = useHandleSelectionChangeEffect(context)
-    console.log(context.attrs, 'attrs')
-    const attrs = context.attrs // 获取no-props 把父组件定义的属性直接使用
+    // const attrs = context.attrs // 获取no-props 把父组件定义的属性直接使用 也可以直接使用在属性上使用$attrs
     return {
       handleCurrentChange,
-      handleSelectionChange,
-      attrs
+      handleSelectionChange
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

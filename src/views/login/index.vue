@@ -10,7 +10,7 @@
     >
       <div class="title-container">
         <h3 class="title">
-          vue3
+          都来云智慧物流
         </h3>
       </div>
 
@@ -176,7 +176,6 @@ const useWatchEffect = (redirect, otherQuery) => {
 const useOnMountedEffect = (username, password, loginForm) => {
   onMounted(() => {
     if (loginForm.username === '') {
-      console.log(username.value, 'username.value')
       username.value.focus()
     } else if (loginForm.password === '') {
       password.value.focus()

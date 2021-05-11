@@ -4,9 +4,9 @@
     class="pagination-container"
   >
     <el-pagination
+      v-model:current-page="currentPage"
+      v-model:page-size="pageSize"
       :background="background"
-      :current-page.sync="currentPage"
-      :page-size.sync="pageSize"
       :layout="layout"
       :page-sizes="pageSizes"
       :total="total"
@@ -19,7 +19,7 @@
 
 <script>
 import { scrollTo } from '@/utils/scroll-to'
-
+import { computed } from 'vue'
 export default {
   name: 'Pagination',
   props: {
@@ -38,7 +38,7 @@ export default {
     pageSizes: {
       type: Array,
       default() {
-        return [10, 20, 30, 50]
+        return [10, 20, 40, 80]
       }
     },
     layout: {
@@ -58,36 +58,41 @@ export default {
       default: false
     }
   },
-  computed: {
-    currentPage: {
+  emits: ['pagination', 'update:page', 'update:limit'],
+  setup(props, context) {
+    const currentPage = computed({
       get() {
-        return this.page
+        return props.page
       },
       set(val) {
-        this.$emit('update:page', val)
+        context.emit('update:page', val)
       }
-    },
-    pageSize: {
+    })
+    const pageSize = computed({
       get() {
-        return this.limit
+        return props.limit
       },
       set(val) {
-        this.$emit('update:limit', val)
+        context.emit('update:limit', val)
+      }
+    })
+    const handleSizeChange = (val) => {
+      context.emit('pagination', { page: currentPage, limit: val })
+      if (props.autoScroll) {
+        scrollTo(0, 800)
       }
     }
-  },
-  methods: {
-    handleSizeChange(val) {
-      this.$emit('pagination', { page: this.currentPage, limit: val })
-      if (this.autoScroll) {
+    const handleCurrentChange = (val) => {
+      context.emit('pagination', { page: val, limit: pageSize })
+      if (props.autoScroll) {
         scrollTo(0, 800)
       }
-    },
-    handleCurrentChange(val) {
-      this.$emit('pagination', { page: val, limit: this.pageSize })
-      if (this.autoScroll) {
-        scrollTo(0, 800)
-      }
+    }
+    return {
+      currentPage,
+      pageSize,
+      handleSizeChange,
+      handleCurrentChange
     }
   }
 }
@@ -96,7 +101,7 @@ export default {
 <style scoped>
 .pagination-container {
   background: #fff;
-  padding: 32px 16px;
+  margin-bottom:24px;
 }
 .pagination-container.hidden {
   display: none;

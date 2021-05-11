@@ -17,6 +17,7 @@ module.exports = {
   ],
 
   rules: {
+    'vue/no-v-model-argument': 'off',
     'camelcase': 'off',
     'vue/no-multiple-template-root': 'off',
     'no-console': 'off',
